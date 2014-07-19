@@ -15,6 +15,7 @@ class JiveClient(ClientBase):
 
         request = super(JiveClient, self).get_url(url, **kwargs)
 
+        # Because ... Jive?
         content = request.content.replace(
             "throw 'allowIllegalResourceCall is false.';",
             ''
