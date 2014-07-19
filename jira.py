@@ -1,21 +1,19 @@
-import os
 import datetime
 from omni_api import base
 
 import pytz
 
-JIRA_HOST = 'https://tofurkey.urbanairship.com'
 TIMEZONE = pytz.timezone('US/Pacific')
 
 
 class JiraClient(base.ClientBase):
-    def __init__(self, username=None, password=None):
+    def __init__(self, url_base, username=None, password=None):
+        self.url_base = url_base
         self.username = username
         self.auth = (self.username, password)
 
-    @staticmethod
-    def url(path):
-        return JIRA_HOST + '/rest/api/2' + path
+    def url(self, path):
+        return self.url_base + '/rest/api/2' + path
 
     def get_url(self, path, **kwargs):
         url = self.url(path)

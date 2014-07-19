@@ -1,16 +1,14 @@
 import json
 from omni_api.base import ClientBase, DataItem
 
-JIVE_URL = 'https://urbanairship.jiveon.com'
-
 
 class JiveClient(ClientBase):
-    def __init__(self, username, password):
+    def __init__(self, url_base, username, password):
+        self.url_base = url_base
         self.auth = (username, password)
 
-    @staticmethod
-    def api_url(path):
-        return JIVE_URL + '/api/core/v3' + path
+    def api_url(self, path):
+        return self.url_base + '/api/core/v3' + path
 
     def get_url(self, url, **kwargs):
         kwargs['auth'] = self.auth
