@@ -4,9 +4,11 @@ from dateutil.parser import parse as parse_date
 
 
 class ClientBase:
+    """
+    Abstract parent class for API clients.
+    """
 
-    @classmethod
-    def get_url(cls, url, load_json=False, **kwargs):
+    def get_url(self, url, load_json=False, **kwargs):
         request = requests.get(url, **kwargs)
 
         if request.status_code > 299:
@@ -29,6 +31,9 @@ class ClientBase:
 
 
 class DataItem:
+    """
+    Simple wrapper around response json.
+    """
 
     def __init__(self, data):
         self.data = data

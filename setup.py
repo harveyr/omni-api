@@ -1,7 +1,15 @@
 #!/usr/bin/env python
 
+import os
 from setuptools import setup, find_packages
+from pip.req import parse_requirements
 
+install_requires = parse_requirements(
+    os.path.join(
+        os.path.split(os.path.realpath(__file__))[0],
+        'requirements.txt'
+    )
+)
 
 setup(
     name='omni-api',
@@ -10,9 +18,5 @@ setup(
     author='Harvey Rogers',
     author_email='harveyr@gmail.com',
     packages=find_packages(),
-    install_requires=[
-        'requests >= 2.3.0',
-        'requests_oauthlib >= 0.4.1',
-        'python-dateutil >= 2.2',
-    ]
+    install_requires=[str(ir.req) for ir in install_requires]
 )
