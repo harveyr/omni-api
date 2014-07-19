@@ -1,0 +1,5 @@
+oauthlib==0.6.3
+python-dateutil==2.2
+pytz==2014.4
+requests==2.3.0
+requests-oauthlib==0.4.1
