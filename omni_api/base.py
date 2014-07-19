@@ -3,7 +3,7 @@ from requests_oauthlib import OAuth1
 from dateutil.parser import parse as parse_date
 
 
-class ClientBase:
+class ClientBase(object):
     """
     Abstract parent class for API clients.
     """
@@ -30,7 +30,7 @@ class ClientBase:
         return OAuth1(key, secret)
 
 
-class DataItem:
+class DataItem(object):
     """
     Simple wrapper around response json.
     """
