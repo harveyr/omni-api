@@ -24,6 +24,12 @@ class HackpadClient(ClientBase):
 
         return [HackPad(i) for i in result]
 
+    def all_pads(self):
+        """Returns list of pad ids."""
+
+        # Stupid hack until the necessary endpoint exists
+        return self.search('a')
+
 
 class HackPad(DataItem):
 
