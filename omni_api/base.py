@@ -11,9 +11,9 @@ class ClientBase(object):
     def _finish_request(self, request, load_json=False):
         if request.status_code > 299:
             raise ValueError(
-                'Request to {} failed ({}): {}'.format(
-                    request.url,
+                'Request failed with {} to {}: {}'.format(
                     request.status_code,
+                    request.url,
                     request.content
                 )
             )
@@ -22,7 +22,6 @@ class ClientBase(object):
             return request.json()
 
         return request
-
 
     def get_url(self, url, load_json=False, **kwargs):
         request = requests.get(url, **kwargs)

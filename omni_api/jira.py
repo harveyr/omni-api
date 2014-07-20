@@ -1,5 +1,6 @@
 import datetime
 from omni_api import base
+import base64
 
 import pytz
 
@@ -7,17 +8,26 @@ TIMEZONE = pytz.timezone('US/Pacific')
 
 
 class JiraClient(base.ClientBase):
-    def __init__(self, url_base, username=None, password=None):
+    def __init__(self, url_base, username, password):
+        if url_base[-1] == '/':
+            url_base = url_base[:-1]
+
         self.url_base = url_base
         self.username = username
-        self.auth = (self.username, password)
+        self.auth = (username, password)
 
     def url(self, path):
-        return self.url_base + '/rest/api/2' + path
+        return self.url_base + '/rest/api/latest' + path
 
     def get_url(self, path, **kwargs):
         url = self.url(path)
-        kwargs['auth'] = self.auth
+
+        auth_header = base64.b64encode(':'.join(self.auth))
+
+        kwargs['headers'] = {
+            'Authorization': 'Basic ' + auth_header,
+            'Content-Type': 'application/json',
+        }
 
         return super(JiraClient, self).get_url(url, load_json=True, **kwargs)
 

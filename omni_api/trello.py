@@ -101,6 +101,10 @@ class TrelloClient(base.ClientBase):
 class TrelloList(base.DataItem):
 
     @property
+    def id(self):
+        return self.data['id']
+
+    @property
     def name(self):
         return self.data['name']
 
