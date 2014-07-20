@@ -72,7 +72,11 @@ class TrelloClient(base.ClientBase):
     def get_boards(self, member_id):
         data = self.get_url('/members/{}/boards'.format(member_id))
 
-        return [TrelloBoard(b) for b in data]
+        boards = [TrelloBoard(b) for b in data]
+        filtered = [b for b in boards if not b.closed and b.last_activity]
+        filtered.sort(key=lambda x: x.last_activity)
+
+        return filtered
 
     def get_lists(self, board_id):
         data = self.get_url('/boards/{}/lists'.format(board_id))
@@ -118,6 +122,23 @@ class TrelloBoard(base.DataItem):
     @property
     def url(self):
         return self.data['url']
+
+    @property
+    def short_url(self):
+        return self.data['shortUrl']
+
+    @property
+    def closed(self):
+        return self.data['closed']
+
+    @property
+    def last_activity(self):
+        date_str = self.data['dateLastActivity']
+
+        if date_str:
+            return self.parse_date(date_str)
+
+        return None
 
     @property
     def short_url(self):
