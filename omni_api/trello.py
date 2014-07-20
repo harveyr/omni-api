@@ -74,7 +74,7 @@ class TrelloClient(base.ClientBase):
 
         boards = [TrelloBoard(b) for b in data]
         filtered = [b for b in boards if not b.closed and b.last_activity]
-        filtered.sort(key=lambda x: x.last_activity)
+        filtered.sort(key=lambda x: x.last_activity, reverse=True)
 
         return filtered
 
