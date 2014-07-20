@@ -20,19 +20,30 @@ class TrelloClient(base.ClientBase):
     def api_url(path):
         return 'https://api.trello.com/1' + path
 
+    def _base_params(self):
+        return {
+            'name': self.CLIENT_NAME,
+            'key': self.api_key,
+            'token': self.api_token,
+        }
+
     def get_url(self, path, **kwargs):
         url = 'https://api.trello.com/1' + path
 
         params = kwargs.get('params', {})
-        params.update({
-            'name': self.CLIENT_NAME,
-            'key': self.api_key,
-            'token': self.api_token,
-        })
+        params.update(self._base_params())
 
         kwargs['params'] = params
 
         return super(TrelloClient, self).get_url(url, load_json=True, **kwargs)
+
+    def post_url(self, url, **kwargs):
+        data = kwargs.get('data', {})
+        data.update(self._base_params())
+        
+        kwargs['data'] = data
+        
+        return super(TrelloClient, self).post_url(url, **kwargs)
 
     @classmethod
     def get_trello_token_html_url(cls, api_key):
@@ -62,6 +73,32 @@ class TrelloClient(base.ClientBase):
         data = self.get_url('/members/{}/boards'.format(member_id))
 
         return [TrelloBoard(b) for b in data]
+
+    def get_lists(self, board_id):
+        data = self.get_url('/boards/{}/lists'.format(board_id))
+
+        return [TrelloList(l) for l in data]
+
+    def create_card(self, list_id, name, desc='Created with OmniApi'):
+        url = '/cards'
+
+        data = {
+            'name': name,
+            'idList': list_id,
+            'desc': desc,
+        }
+
+        self.post_url(
+            url,
+            data=data
+        )
+
+
+class TrelloList(base.DataItem):
+
+    @property
+    def name(self):
+        return self.data['name']
 
 
 class TrelloBoard(base.DataItem):

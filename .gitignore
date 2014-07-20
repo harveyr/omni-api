@@ -12,6 +12,7 @@ pyvenv.cfg
 
 # Distribution / packaging
 .Python
+include/
 env/
 build/
 develop-eggs/

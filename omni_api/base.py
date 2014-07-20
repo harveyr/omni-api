@@ -8,9 +8,7 @@ class ClientBase(object):
     Abstract parent class for API clients.
     """
 
-    def get_url(self, url, load_json=False, **kwargs):
-        request = requests.get(url, **kwargs)
-
+    def _finish_request(self, request, load_json=False):
         if request.status_code > 299:
             raise ValueError(
                 'Request to {} failed ({}): {}'.format(
@@ -24,6 +22,25 @@ class ClientBase(object):
             return request.json()
 
         return request
+
+
+    def get_url(self, url, load_json=False, **kwargs):
+        request = requests.get(url, **kwargs)
+
+        return self._finish_request(
+            request,
+            load_json=load_json
+        )
+
+    def post_url(self, url, load_json=False, **kwargs):
+        request = requests.post(url, **kwargs)
+
+        return self._finish_request(
+            request,
+            load_json=load_json
+        )
+
+
 
     @staticmethod
     def get_oauth_token(key, secret):
