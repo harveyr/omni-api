@@ -84,7 +84,7 @@ class TrelloClient(base.ClientBase):
         return [TrelloList(l) for l in data]
 
     def create_card(self, list_id, name, desc='Created with OmniApi'):
-        url = '/cards'
+        url = self.api_url('/cards')
 
         data = {
             'name': name,

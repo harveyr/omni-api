@@ -28,6 +28,11 @@ class GithubClient(base.ClientBase):
 
         return super(GithubClient, self).get_url(url, load_json=True, **kwargs)
 
+    def get_emoji(self):
+        url = self.api_url('/emojis')
+
+        return self.get_url(url)
+
     def get_prs(self, repo_path):
         url = self.repo_url(repo_path, 'pulls')
         result = self.get_url(url)
