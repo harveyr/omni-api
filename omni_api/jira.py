@@ -31,6 +31,20 @@ class JiraClient(base.ClientBase):
 
         return super(JiraClient, self).get_url(url, load_json=True, **kwargs)
 
+    def get_user(self, username):
+        params = {'username': username}
+
+        result = self.get_url('/user', params=params)
+
+        return JiraUser(result)
+
+    def search_users(self, query):
+        params = {'query': query}
+
+        result = self.get_url('/user/search', params=params)
+
+        return result
+
     def get_issue(self, issue):
         result = self.get_url('/issue/' + issue)
 
@@ -87,3 +101,30 @@ class Issue(base.DataItem):
     @property
     def created(self):
         return self.parse_date(self.field('created'))
+
+
+class JiraUser(base.DataItem):
+
+    @property
+    def active(self):
+        return self.data['active']
+
+    @property
+    def display_name(self):
+        return self.data['displayName']
+
+    @property
+    def email(self):
+        return self.data['email']
+
+    @property
+    def key(self):
+        return self.data['key']
+
+    @property
+    def name(self):
+        return self.data['name']
+
+    @property
+    def avatar_urls(self):
+        return self.data['avatarUrls']
