@@ -28,19 +28,19 @@ class TrelloClient(base.ClientBase):
         }
 
     def get_url(self, path, **kwargs):
-        url = 'https://api.trello.com/1' + path
+        url = self.api_url(path)
 
-        params = kwargs.get('params', {})
-        params.update(self._base_params())
-
+        params = self._base_params()
+        params.update(kwargs.get('params', {}))
         kwargs['params'] = params
 
         return super(TrelloClient, self).get_url(url, load_json=True, **kwargs)
 
-    def post_url(self, url, **kwargs):
-        data = kwargs.get('data', {})
-        data.update(self._base_params())
-        
+    def post_url(self, path, **kwargs):
+        url = self.api_url(path)
+
+        data = self._base_params()
+        data.update(kwargs.get('data', {}))
         kwargs['data'] = data
         
         return super(TrelloClient, self).post_url(url, **kwargs)
@@ -84,18 +84,13 @@ class TrelloClient(base.ClientBase):
         return [TrelloList(l) for l in data]
 
     def create_card(self, list_id, name, desc='Created with OmniApi'):
-        url = self.api_url('/cards')
-
         data = {
             'name': name,
             'idList': list_id,
             'desc': desc,
         }
 
-        self.post_url(
-            url,
-            data=data
-        )
+        self.post_url('/cards', data=data)
 
 
 class TrelloList(base.DataItem):
